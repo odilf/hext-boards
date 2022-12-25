@@ -1,0 +1,13 @@
+[package]
+name = "hex-boards"
+version = "0.1.0"
+edition = "2021"
+authors = ["Odysseas <odysseas.maheras@gmail.com>"]
+description = "A small library that renders hexagonal boards on the terminal"
+readme = "README.md"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+nalgebra = "0.31.4"
+termion = "2.0.1"
