@@ -73,28 +73,30 @@ impl<T> HexagonalBoard<T> where char: From<T>, T: Copy {
 	}
 }
 
+pub fn render(char_map: HashMap<Vector2<i32>, char>) -> String {
+	// Get bounds
+	let max_x = char_map.iter().map(|(pos, _)| pos.x).max().unwrap_or(0);
+	let max_y = char_map.iter().map(|(pos, _)| pos.y).max().unwrap_or(0);
+
+	let mut output = String::with_capacity((max_x * max_y) as usize);
+
+	for y in 0..=max_y {
+		for x in 0..=max_x {
+			output.push(*char_map.get(&vector![x, y]).unwrap_or(&' '));
+		}
+
+		if y != max_y {
+			output.push('\n');
+		}
+	}
+
+	output
+}
+
 
 impl From<HexagonalBoard<char>> for String {
     fn from(board: HexagonalBoard<char>) -> Self {
-		let board = board.char_map();
-
-        // Get bounds
-		let max_x = board.iter().map(|(pos, _)| pos.x).max().unwrap_or(0);
-		let max_y = board.iter().map(|(pos, _)| pos.y).max().unwrap_or(0);
-
-		let mut output = String::with_capacity((max_x * max_y) as usize);
-
-		for y in 0..=max_y {
-			for x in 0..=max_x {
-				output.push(*board.get(&vector![x, y]).unwrap_or(&' '));
-			}
-
-			if y != max_y {
-				output.push('\n');
-			}
-		}
-
-		output
+		render(board.char_map())      
     }
 }
 
