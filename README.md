@@ -1,21 +1,24 @@
 # hex-boards
 
-A small library that renders hexagonal boards on the terminal. 
+A small library that renders hexagonal boards on the terminal.
 
 ## Example
 
 ```rust
-use hex_boards::HexagonalBoard;
-use nalgebra::vector;
+use hext_boards::HexagonalBoard;
+use glam::ivec2;
 
 let board = HexagonalBoard::from([
-	(vector![0, 0], 'a'),
-	(vector![1, 0], 'b'),
-	(vector![0, 1], 'c'),
-	(vector![-1, -1], 'd'),
+    (ivec2(0, 0), 'a'),
+    (ivec2(1, 0), 'b'),
+    (ivec2(0, 1), 'c'),
+    (ivec2(-1, -1), 'd'),
 ]);
 
-let output = format!("{board}");
+let output = board.to_string();
+
+// Also works
+println!("{board}");
 
 /* Output is the following:
 

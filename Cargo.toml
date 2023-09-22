@@ -15,5 +15,5 @@ exclude = [".cargo_vcs_info.json"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-nalgebra = "0.31.4"
+glam = "0.24.1"
 termion = "2.0.1"
