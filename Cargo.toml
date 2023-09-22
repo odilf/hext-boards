@@ -1,6 +1,6 @@
 [package]
 name = "hext-boards"
-version = "0.1.1"
+version = "0.2.0"
 edition = "2021"
 authors = ["Odysseas <odysseas.maheras@gmail.com>"]
 description = "A small library that renders hexagonal boards with text on the terminal"
