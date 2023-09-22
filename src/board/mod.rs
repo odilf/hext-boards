@@ -41,15 +41,11 @@ where
     /// Creates a map from a position in the terminal to the character it should output
     pub fn char_map(&self) -> HashMap<Vector2<i32>, char> {
         let min_x = self
-            .values
-            .iter()
-            .map(|(pos, _)| pos.x - pos.y)
+            .values.keys().map(|pos| pos.x - pos.y)
             .max()
             .unwrap_or(0);
         let max_y = self
-            .values
-            .iter()
-            .map(|(pos, _)| pos.x + pos.y)
+            .values.keys().map(|pos| pos.x + pos.y)
             .max()
             .unwrap_or(0);
 
@@ -86,8 +82,8 @@ where
 
 pub fn render(char_map: HashMap<Vector2<i32>, char>) -> String {
     // Get bounds
-    let max_x = char_map.iter().map(|(pos, _)| pos.x).max().unwrap_or(0);
-    let max_y = char_map.iter().map(|(pos, _)| pos.y).max().unwrap_or(0);
+    let max_x = char_map.keys().map(|pos| pos.x).max().unwrap_or(0);
+    let max_y = char_map.keys().map(|pos| pos.y).max().unwrap_or(0);
 
     let mut output = String::with_capacity((max_x * max_y) as usize);
 
