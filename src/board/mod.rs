@@ -121,6 +121,14 @@ impl<const N: usize, T> From<[(IVec2, T); N]> for HexagonalBoard<T> {
     }
 }
 
+impl<T> FromIterator<(IVec2, T)> for HexagonalBoard<T> {
+    fn from_iter<I: IntoIterator<Item = (IVec2, T)>>(iter: I) -> Self {
+        Self {
+            values: iter.into_iter().collect(),
+        }
+    }
+}
+
 impl Display for HexagonalBoard<char> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", String::from(self.clone()))
