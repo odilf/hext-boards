@@ -1,16 +1,25 @@
+#![cfg(test)]
+
 use super::*;
+use indoc::indoc;
+use pretty_assertions::assert_eq;
 
 #[test]
 fn display() {
-    let board = HexagonalBoard::from([
-        (ivec2(0, 0), 'a'),
-        (ivec2(1, 0), 'b'),
-        (ivec2(0, 1), 'c'),
-        (ivec2(-1, -1), 'd'),
-    ]);
+    let board =
+        HexagonalBoard::from([([0, 0], 'a'), ([1, 0], 'b'), ([0, 1], 'c'), ([-1, -1], 'd')]);
 
     let output = format!("{board}");
-    let expected = include_str!("./board_example.txt");
+    let expected = indoc!(
+        r"
+             /---\     /---\
+            ⟨  b  ⟩---⟨  c  ⟩
+             \---⟨  a  ⟩---/
+                  ⟩---⟨
+                 ⟨  d  ⟩
+                  \---/
+        "
+    );
 
     println!("{output}");
     println!("{expected}");
@@ -20,4 +29,59 @@ fn display() {
             assert_eq!(output, expected)
         }
     }
+}
+
+#[test]
+fn single() {
+    let board = HexagonalBoard::from([([0, 0], 'a')]);
+
+    print!("{board}");
+
+    let expected = indoc!(
+        r"
+             /---\ 
+            ⟨  a  ⟩
+             \---/ 
+        "
+    ).trim_end_matches('\n');
+
+    assert_eq!(board.render(), expected);
+}
+
+#[test]
+fn four() {
+    let board =
+        HexagonalBoard::from([([0, 0], 'a'), ([1, 0], 'b'), ([0, 1], 'c'), ([-1, -1], 'd')]);
+
+    let expected = indoc!(
+        r"
+             /---\     /---\ 
+            ⟨  b  ⟩---⟨  c  ⟩
+             \---⟨  a  ⟩---/ 
+                  ⟩---⟨      
+                 ⟨  d  ⟩     
+                  \---/      
+        "
+    ).trim_end_matches('\n');
+
+    assert_eq!(board.render(), expected);
+}
+
+#[test]
+fn empty_center() {
+    let board = HexagonalBoard::from([([1, 1], 't'), ([-1, -1], 'b')]);
+
+    let expected = indoc!(
+        r"
+             /---\ 
+            ⟨  t  ⟩
+             \---/ 
+                   
+             /---\ 
+            ⟨  b  ⟩
+             \---/ 
+        "
+    ).trim_end_matches('\n');
+
+    assert_eq!(board.render(), expected);
 }

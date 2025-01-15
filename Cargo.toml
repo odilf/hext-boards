@@ -1,12 +1,12 @@
 [package]
 name = "hext-boards"
-version = "0.2.0"
+version = "0.4.0"
 edition = "2021"
-authors = ["Odysseas <odysseas.maheras@gmail.com>"]
+authors = ["Odilf <odysseas.maheras@gmail.com>"]
 description = "A small library that renders hexagonal boards with text on the terminal"
 readme = "README.md"
-repository = "https://github.com/Odilf/hext-boards/"
-license-file = "LICENSE"
+repository = "https://github.com/odilf/hext-boards/"
+license = "MIT"
 keywords = ["terminal", "hexagons", "ascii"]
 categories = ["command-line-utilities"]
 
@@ -16,4 +16,7 @@ exclude = [".cargo_vcs_info.json"]
 
 [dependencies]
 glam = "0.24.1"
-termion = "2.0.1"
+
+[dev-dependencies]
+indoc = "2.0.5"
+pretty_assertions = "1.4.1"
