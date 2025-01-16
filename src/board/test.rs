@@ -39,11 +39,12 @@ fn single() {
 
     let expected = indoc!(
         r"
-             /---\ 
+             /---\
             ⟨  a  ⟩
-             \---/ 
+             \---/
         "
-    ).trim_end_matches('\n');
+    )
+    .trim_end_matches('\n');
 
     assert_eq!(board.render(), expected);
 }
@@ -55,14 +56,15 @@ fn four() {
 
     let expected = indoc!(
         r"
-             /---\     /---\ 
+             /---\     /---\
             ⟨  b  ⟩---⟨  c  ⟩
-             \---⟨  a  ⟩---/ 
-                  ⟩---⟨      
-                 ⟨  d  ⟩     
-                  \---/      
+             \---⟨  a  ⟩---/
+                  ⟩---⟨
+                 ⟨  d  ⟩
+                  \---/
         "
-    ).trim_end_matches('\n');
+    )
+    .trim_end_matches('\n');
 
     assert_eq!(board.render(), expected);
 }
@@ -73,15 +75,16 @@ fn empty_center() {
 
     let expected = indoc!(
         r"
-             /---\ 
+             /---\
             ⟨  t  ⟩
-             \---/ 
-                   
-             /---\ 
+             \---/
+
+             /---\
             ⟨  b  ⟩
-             \---/ 
+             \---/
         "
-    ).trim_end_matches('\n');
+    )
+    .trim_end_matches('\n');
 
     assert_eq!(board.render(), expected);
 }

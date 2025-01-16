@@ -39,7 +39,7 @@ const DYNAMIC_TILE_ELEMENTS: [(IVec2, char, char); 4] = [
 /// where the keys are something that can be converted to a [`glam::IVec2`] (e.g., `[i32; 2]`).
 ///
 /// The positions are interpreted as hexagonal coordinates, where the basis `[1, 0]` is the
-/// hexagon to the left and up, and `[0, 1]` is the one to the right and up. 
+/// hexagon to the left and up, and `[0, 1]` is the one to the right and up.
 ///
 /// You can render a [`HexagonalBoard`] using [`HexagonalBoard::render`] if `T: Into<char> +
 /// Clone`. Otherwise, you can use [`HexagonalBoard::render_with`] to specify how to convert the
@@ -87,18 +87,18 @@ const DYNAMIC_TILE_ELEMENTS: [(IVec2, char, char); 4] = [
 ///     ([0, 1], 13),
 ///     ([1, 1], 25),
 /// ]);
-/// 
+///
 /// // Everything needs to be one char, so we have to use hexadecimal or some other radix to
-/// // output higher numbers. 
+/// // output higher numbers.
 /// let output = board.render_with(|n| char::from_digit(*n, 36).expect("`n` is less than 36."));
 ///
 /// let expected = indoc::indoc!(
 ///     r"
-///          /---\      
+///          /---\
 ///         ⟨  p  ⟩---\
 ///          ⟩---⟨  d  ⟩
 ///         ⟨  5  ⟩---/
-///          \---/      
+///          \---/
 ///     "
 /// ).trim_end_matches('\n');
 ///
@@ -111,7 +111,7 @@ pub struct HexagonalBoard<T> {
 
 // TODO: I shouldn't have to depend on `Copy` but whatever
 impl<T> HexagonalBoard<T> {
-    /// Map from coordinates 
+    /// Map from coordinates
     pub fn char_map(&self, into_char: impl Fn(&T) -> char) -> HashMap<IVec2, char> {
         let min_x = self
             .values
@@ -172,19 +172,28 @@ impl<T> HexagonalBoard<T> {
         for<'a> char: From<T>,
         T: Copy,
     {
-        render_char_map(self.char_map(|t| char::from(*t)))
+        self.render_with(|t| char::from(*t))
     }
 }
 
 fn render_char_map(char_map: HashMap<IVec2, char>) -> String {
     // Get bounds
-    let max_x = char_map.keys().map(|pos| pos.x).max().unwrap_or(0);
-    let max_y = char_map.keys().map(|pos| pos.y).max().unwrap_or(0);
+    // If not present, we default to `-1`, because if it were `0` then that would indicate that
+    // there is a character in the first column.
+    let max_x = char_map.keys().map(|pos| pos.x).max().unwrap_or(-1);
+    let max_y = char_map.keys().map(|pos| pos.y).max().unwrap_or(-1);
 
     let mut output = String::with_capacity((max_x * max_y) as usize);
 
     for y in 0..=max_y {
-        for x in 0..=max_x {
+        let max_x_line = char_map
+            .keys()
+            .filter(|pos| pos.y == y)
+            .map(|pos| pos.x)
+            .max()
+            .unwrap_or(-1); // Same note as above.
+
+        for x in 0..=max_x_line {
             output.push(*char_map.get(&ivec2(x, y)).unwrap_or(&' '));
         }
 
