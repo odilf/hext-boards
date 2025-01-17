@@ -161,7 +161,7 @@ impl<T> HexagonalBoard<T> {
     /// If `T` can easily be converted to a [`char`] (i.e., `T: Into<char> + Copy`), you can
     /// use [`Self::render`].
     pub fn render_with(&self, into_char: impl Fn(&T) -> char) -> String {
-        render_char_map(self.char_map(into_char))
+        render_char_map(self.char_map(into_char).into_iter().collect())
     }
 
     /// Renders the hexagonal board into a [`String`].
@@ -176,30 +176,25 @@ impl<T> HexagonalBoard<T> {
     }
 }
 
-fn render_char_map(char_map: HashMap<IVec2, char>) -> String {
-    // Get bounds
-    // If not present, we default to `-1`, because if it were `0` then that would indicate that
-    // there is a character in the first column.
-    let max_x = char_map.keys().map(|pos| pos.x).max().unwrap_or(-1);
-    let max_y = char_map.keys().map(|pos| pos.y).max().unwrap_or(-1);
+fn render_char_map(mut char_map: Vec<(IVec2, char)>) -> String {
+    char_map.sort_unstable_by_key(|(pos, _)| (pos.y, pos.x));
+    let mut output = String::with_capacity(char_map[char_map.len() - 1].0.x as usize);
 
-    let mut output = String::with_capacity((max_x * max_y) as usize);
-
-    for y in 0..=max_y {
-        let max_x_line = char_map
-            .keys()
-            .filter(|pos| pos.y == y)
-            .map(|pos| pos.x)
-            .max()
-            .unwrap_or(-1); // Same note as above.
-
-        for x in 0..=max_x_line {
-            output.push(*char_map.get(&ivec2(x, y)).unwrap_or(&' '));
-        }
-
-        if y != max_y {
+    let mut cursor = IVec2::new(0, 0);
+    for (position, char) in char_map {
+        while cursor.y < position.y {
             output.push('\n');
+            cursor.y += 1;
+            cursor.x = 0;
         }
+
+        while cursor.x < position.x {
+            output.push(' ');
+            cursor.x += 1;
+        }
+
+        output.push(char);
+        cursor.x += 1;
     }
 
     output
